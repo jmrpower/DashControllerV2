@@ -1,0 +1,10 @@
+[globals]
+
+DEBUG=3
+UI=app/views/
+AUTOLOAD=app/controllers/|app/models/
+CACHE=false 
+
+devdb = "mysql:host=192.168.0.18;port=3306;dbname=rpower"
+devdbusername = "rpower"
+devdbpassword = "rpower123"

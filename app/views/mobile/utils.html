@@ -1,0 +1,36 @@
+<script src="js/stupidtable.js"></script>  
+<script>
+   var storeMID = localStorage.getItem("selectedStore");
+   var userID = localStorage.getItem("userID");
+   var user = localStorage.getItem("user");
+   var pass = localStorage.getItem("pass");
+   var cg = localStorage.getItem("cg");
+   var token = localStorage.getItem("token");
+   var license = localStorage.getItem("license");
+   var serial = localStorage.getItem("serial");
+   var xtags = localStorage.getItem("xtags");
+   var url = 'http://rpower.com:1337/';
+   
+   var postData = { userID: userID, storeMID: storeMID, license: license, token: token, user: user, pass: pass, isMobile: 1, serial: serial, xtags: xtags };
+   
+   $.ajax({
+      url: url + 'utils',
+      dataType: 'html',
+      crossDomain: true,
+      method: 'POST',
+      data: postData,
+      success: function (data)
+      {
+         $('#content').html(data);
+      },
+      error: function (data)
+      {
+         
+      },
+   });
+</script>
+
+<div class="container-fluid" id="content">
+   
+</div>
+

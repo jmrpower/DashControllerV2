@@ -1,0 +1,119 @@
+<div class="container">
+   <div class="col-lg-6">
+     <div class="panel panel-default">
+       <div class="panel-heading">
+          <i class="fa fa-pie-chart-o fa-fw"></i><b>Labor Breakdown</b>
+       </div>
+       <div class="panel-body" style="overflow-y: scroll">
+          <div class="col-lg-12">
+             <div id="divLbrByDeptCat"></div>
+          </div>
+       </div>
+     </div>
+   </div>
+
+    <div class="col-lg-6">
+       <div class="panel panel-default">
+          <div class="panel-heading">
+             <b>Time Clock</b>
+             <b class="pull-right"><div class="btn-group bgPunches" role="group"><button type="button" class="btn btn-success btn-xs" id="btnAllPunches">All</button>&nbsp<button type="button" class="btn btn-default btn-xs" id="btnOnPunches">On Clock </button>&nbsp<button type="button" class="btn btn-default btn-xs" id="btnOffPunches">Off Clock</button></div></b>
+          </div>
+          <div class="panel-body" style="overflow-y: scroll">
+             <div class="col-lg-12">
+                <div id="divTCDetail"></div>
+             </div>
+          </div>
+       </div>
+    </div>
+</div>
+
+<script src="app/js/stupidtable.js"></script>
+
+<script>
+   window.setInterval(function()
+   {
+      if (localStorage.getItem("needUpdate") == 1)
+      {
+         var user = localStorage.getItem("user");
+         var pass = localStorage.getItem("pass");
+         var selectedStore = localStorage.getItem("selectedStore");
+         var selectedDate = localStorage.getItem("selectedDate");
+         var token = localStorage.getItem("token");
+         var cg = localStorage.getItem("cg");
+         // var uuid = localStorage.getItem("uuid");
+         var license = localStorage.getItem("license");
+         // refreshData(user, pass, cg, selectedStore, token, selectedStore, selectedDate, uuid, license);
+         refreshData(user, pass, cg, selectedStore, token, selectedStore, selectedDate, license);
+         localStorage.setItem("needUpdate", 0);
+      }
+   }, 500);
+
+   function refreshData()
+   {
+      var selectedStore = localStorage.getItem("selectedStore");
+      var selectedDate = localStorage.getItem("selectedDate");
+      var cg = localStorage.getItem("cg");
+      var postData = { selectedDate: selectedDate, selectedStore: selectedStore, cg: cg };
+
+      $.ajax({
+         url: 'http://192.168.0.66:34295/tcDetailHTML?XDEBUG_SESSION_START',
+         dataType: 'html',
+         crossDomain: true,
+         method: 'post',
+         data: postData,
+         success: function (data)
+         {
+            $('#divTCDetail').html(data);
+            $("#tblTCDetail").stupidtable();
+         },
+         error: function (data)
+         {
+            errorHandler(data);
+         },
+      });
+
+      $.ajax({
+         url: 'http://192.168.0.66:34295/laborByCatHTML?XDEBUG_SESSION_START',
+         dataType: 'html',
+         crossDomain: true,
+         method: 'post',
+         data: postData,
+         success: function (data)
+         {
+            $('#divLbrByDeptCat').html(data);
+         },
+         error: function (data)
+         {
+            errorHandler(data);
+         },
+      });
+
+      $('#btnAllPunches').click(function (e)
+      {
+         $(".bgPunches > .btn").addClass("btn-default");
+         $(".bgPunches > .btn").removeClass("btn-success");
+         $("#btnAllPunches").addClass("btn-success");
+         $(".offClock").show();
+         $(".onClock").show();
+      });
+
+      $('#btnOnPunches').click(function (e)
+      {
+         $(".bgPunches > .btn").addClass("btn-default");
+         $(".bgPunches > .btn").removeClass("btn-success");
+         $("#btnOnPunches").addClass("btn-success");
+         $(".offClock").hide();
+         $(".onClock").show();
+      });
+
+      $('#btnOffPunches').click(function (e)
+      {
+         $(".bgPunches > .btn").addClass("btn-default");
+         $(".bgPunches > .btn").removeClass("btn-success");
+         $("#btnOffPunches").addClass("btn-success");
+         $(".offClock").show();
+         $(".onClock").hide();
+      });
+   }
+
+</script>

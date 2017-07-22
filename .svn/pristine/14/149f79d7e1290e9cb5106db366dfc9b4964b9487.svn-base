@@ -1,0 +1,276 @@
+<?php
+/**
+
+ /**
+ * Controller class
+ *
+ * @category PHP
+ * @package  Fat-Free-PHP-Bootstrap-Site
+ * @author   Mark Takacs <takacsmark@takacsmark.com>
+ * @license  MIT
+ * @link     takacsmark.com
+ */
+
+require('app/bin/mysql.php');
+require('app/controllers/Auth.php');
+require('app/bin/k3Utils.php');
+require('app/utils/TableBuilder.php');
+
+class MainController extends Controller
+{
+    /**
+     * Renders the dashboard view template
+     *
+     * @return void
+     */
+
+   function tableTest()
+   {
+      $test = new TableBuilder();
+      $test->tableStart("ID", "CLASS");
+      $test->tbody("<tr><td></td></tr>");
+      $test->tbody("<tr><td></td></tr>");
+      $test->thead = "<thead>";
+      echo $test->getTable();
+   }
+
+    function render()
+    {
+        $this->f3->set('body', 'main.htm');
+        $template=new Template;
+        echo $template->render('layout.htm');
+    }
+
+    function overview()
+    {
+        $template=new Template;
+        echo $template->render('overview.htm');
+    }
+
+    function sales()
+    {
+        $template=new Template;
+        echo $template->render('sales.htm');
+    }
+
+    function disvoid()
+    {
+       $template=new Template;
+       echo $template->render('disvoid.htm');
+    }
+
+    function labor()
+    {
+       $template=new Template;
+       echo $template->render('labor.htm');
+    }
+
+   function destroySession()
+   {
+      $f3 = Base::instance();
+      $f3->clear('SESSION');
+      $f3->reroute('/login');
+   }
+
+   function storeListByUser()
+   {
+
+      $token = $this->f3->get('SESSION.token');
+      $username = $this->f3->get('SESSION.user');
+
+      /*
+      $valid = json_decode(Auth::triAuth($token, $license));
+      if ($valid->valid == 0)
+      {
+         exit;
+      }
+      */
+
+      $db = new MysqliDb ('192.168.0.18', 'rpower', 'rpower123', 'rpower');
+      $db->where('token', $token);
+      $res = $db->get('rp_dash_users');
+      if ($res)
+      {
+         $db = new MysqliDb ('192.168.0.18', 'rpower', 'rpower123', 'rpower');
+         $db->where('username', $username);
+         $res = $db->get('tbl_users');
+         if ($res)
+         {
+            // load store list
+            $storeList = array();
+            $userCG = $res[0][user_cg];
+            $userStores = $res[0][user_store_sn];
+            if (strpos($userCG, "|"))
+            {
+               // This doesn't mean they have access to all stores in this cg.....
+               // We should check the store list for pipes because that will override
+               // pipes in CG
+               if (strpos($userStores, "|"))
+               {
+                  // Get these stores instead of loading stores in the CGs
+                  $userStores = str_replace("|", ",", $userStores);
+                  $query = "SELECT CAST(mid AS CHAR) as mid, tag_name, cg, serial_number, lup_zdttm FROM tbl_store WHERE serial_number IN ($userStores) ";
+               }
+               elseif ($userStores == 4)
+               {
+                  // Yes, they have access to ALL stores in ALL listed CGs
+                  $userCG = str_replace("|", ",", $userCG);
+                  $query = "SELECT CAST(mid AS CHAR) as mid, tag_name, cg, serial_number, lup_zdttm FROM tbl_store WHERE cg IN ($userCG) ";
+               }
+               else
+               {
+                  // You shouldn't be here.
+                  return "wtf";
+               }
+            }
+            elseif (!strpos($userCG, "|") && strpos($userStores, "|"))
+            {
+               // Only one CG, dump store list for all stores in $userStores
+               $userStores = str_replace("|", ",", $userStores);
+               $query = "SELECT CAST(mid AS CHAR) as mid, tag_name, cg, serial_number, lup_zdttm FROM tbl_store WHERE serial_number IN ($userStores) ";
+            }
+            else
+            {
+               // only one CG/Store, dump store list for that CG
+               $userCG = str_replace("|", ",", $userCG);
+               $query = "SELECT CAST(mid AS CHAR) as mid, tag_name, cg, serial_number, lup_zdttm FROM tbl_store WHERE cg IN ($userCG) ";
+            }
+            $storeRet = $db->query($query);
+            foreach ($storeRet as $key => $value)
+            {
+               $storeList[] = $value[serial_number];
+            }
+            // write delim store list to DB for billing
+            $storeList = implode("|", $storeList);
+            $updateData = array('userStores' => $storeList);
+            $db->where('id', $valid->id);
+            $res = $db->update('rp_dash_users', $updateData);
+            if ($res)
+            {
+               echo json_encode($storeRet);
+            }
+            else
+            {
+               return "error";
+            }
+         }
+         return "error";
+      }
+      return "error";
+   }
+
+   function storeLastUpdate()
+   {
+      $token = $this->f3->get('SESSION.token');
+      $username = $this->f3->get('SESSION.user');
+      $storeMID = $this->f3->get('POST.selectedStore');
+      $cg = $this->f3->get('POST.cg');
+
+      $db = mysqli_connect('192.168.0.18', 'rpower', 'rpower123', 'rpower');
+      $query = "SELECT * FROM tbl_store WHERE cg = $cg AND mid = $storeMID";
+      $res = $db->query($query);
+      foreach($res as $row)
+      {
+         $ret[] = $row;
+      }
+      $db = mysqli_connect('192.168.0.18', 'rpower', 'rpower123', 'rpower');
+      $query = "SELECT lastMessageAck FROM rp_dash_users where username = '$user'";
+      $resLMA = $db->query($query);
+      if ($resLMA)
+      {
+         foreach ($resLMA as $rowLMA)
+         {
+            $ret[999999999] = $rowLMA;
+         }
+      }
+      $query = "select MAX(date) as date from tbl_ticket where cg = $cg and store_mid = $storeMID";
+      $resMaxDate = $db->query($query);
+      if ($resMaxDate)
+      {
+         foreach ($resMaxDate as $rowMaxDate)
+         {
+            $ret[999999998] = $rowMaxDate;
+         }
+      }
+      echo json_encode($ret);
+   }
+
+
+   function findCheckRID()
+   {
+      $checkNumber = $this->f3->get('POST.checkNumber');
+      $storeMID = $this->f3->get('POST.selectedStore');
+      $cg = $this->f3->get('POST.cg');
+      $date = $this->f3->get('POST.date');
+
+      $db = new MysqliDb ('192.168.0.18', 'rpower', 'rpower123', 'rpower');
+      $query = "SELECT CAST(rid AS CHAR) AS rid FROM tbl_ticket where cg = $cg AND store_mid = $storeMID AND ticket = $checkNumber AND date = '$date'";
+      $res = $db->query($query);
+      foreach($res as $row)
+      {
+         $ret[] = $row;
+      }
+      echo json_encode($ret, JSON_HEX_QUOT | JSON_HEX_TAG);
+   }
+
+   function checkDetail()
+   {
+      $storeMID = $this->f3->get('POST.storeMID');
+      $cg = $this->f3->get('POST.cg');
+      $ticketRID = $this->f3->get('POST.ticketRID');
+      $db = mysqli_connect('192.168.0.18', 'rpower', 'rpower123', 'rpower');
+      $query = "SELECT tbl_store.name AS storeName, tbl_ticket.ticket AS ticketNum, tbl_employee.name AS server, tbl_ticket.open_dttm AS openTime, tbl_ticket.close_dttm AS closeTime, tbl_ticket.guest_count AS guestCount, tbl_menu_item.name AS item, tbl_ticket_item.real_total AS amount, tbl_ticket_item.qty, tbl_ticket_item.note,
+		      tbl_ticket_item.ticket, tbl_ticket.tax, CAST(tbl_ticket_item.ticket_rid AS CHAR) as rid, tbl_ticket_item.atom, tbl_ticket_item.parent_atom,
+		      CASE WHEN tbl_ticket_item.parent_atom > 1
+		      THEN tbl_ticket_item.parent_atom +1 ELSE tbl_ticket_item.atom
+		      END AS ordered_atom
+            FROM tbl_ticket_item
+            INNER JOIN tbl_store ON tbl_store.mid = tbl_ticket_item.store_mid
+            INNER JOIN tbl_menu_item ON tbl_ticket_item.menuitem_mid = tbl_menu_item.mid
+            INNER JOIN tbl_ticket ON tbl_ticket_item.ticket_rid = tbl_ticket.rid
+            INNER JOIN tbl_employee ON tbl_ticket.main_server = tbl_employee.mid
+            WHERE tbl_ticket_item.ticket_rid = $ticketRID AND tbl_ticket_item.cg = $cg AND tbl_ticket_item.store_mid = $storeMID
+            ORDER BY ordered_atom asc";
+      $res = $db->query($query);
+      foreach($res as $row)
+      {
+         $ret[] = $row;
+      }
+      echo json_encode($ret);
+   }
+
+   function checkListByPMT()
+   {
+      $paymentMID = $this->f3->get('POST.paymentMID');
+      $storeMID = $this->f3->get('POST.storeMID');
+      $cg = $this->f3->get('POST.cg');
+      $date = $this->f3->get('POST.date');
+      $db = mysqli_connect('192.168.0.18', 'rpower', 'rpower123', 'rpower');
+      $query = "select *,
+             tbl_payment_method.name,
+             tbl_ticket.ticket,
+             tbl_ticket.open_dttm AS open,
+             tbl_ticket.close_dttm AS close,
+             tbl_employee.name AS server
+             FROM tbl_ticket_payment
+             INNER JOIN tbl_payment_method
+             ON tbl_payment_method.mid = tbl_ticket_payment.paymeth_mid
+             INNER JOIN tbl_ticket
+             ON tbl_ticket_payment.ticket_rid = tbl_ticket.rid
+             INNER JOIN tbl_employee
+             ON tbl_ticket.last_server = tbl_employee.mid
+             where paymeth_mid = $paymentMID
+             AND tbl_ticket_payment.date = '$date'
+             AND tbl_ticket_payment.cg = $cg
+             AND tbl_ticket_payment.store_mid = $storeMID
+             ORDER BY tbl_ticket.ticket";
+      $res = $db->query($query);
+      foreach($res as $row)
+      {
+         $ret[] = $row;
+      }
+      echo json_encode($ret);
+   }
+
+
+}

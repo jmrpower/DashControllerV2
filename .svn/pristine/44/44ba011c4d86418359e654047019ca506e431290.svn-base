@@ -1,0 +1,51 @@
+<?php
+
+/**
+ * TableBuilder short summary.
+ *
+ * TableBuilder description.
+ *
+ * @version 1.0
+ * @author Justin
+ */
+class TableBuilder
+{
+   var $tableStart;
+   var $thead;
+   var $tbody;
+   var $tfooter;
+   var $tableEnd;
+
+   function tableStart($id, $class)
+   {
+      $this->tableStart = "<table id=\"$id\" class=\"table table-striped  table-condensed font-12px\" style=\"width:100%\" align=\"center\" border=\"2\">";
+   }
+
+   function tableEnd()
+   {
+      $this->tableEnd = "</table>";
+   }
+
+   function thead($thead)
+   {
+      $this->thead = $thead;
+   }
+
+   function tbody($tbody)
+   {
+      $this->tbody .= $tbody;
+   }
+
+   function tfooter($tfooter)
+   {
+      $this->tfooter = $tfooter;
+   }
+
+   function getTable()
+   {
+      return $this->tableStart . $this->thead . $this->tbody . $this->tfooter . $this->tableEnd;
+   }
+
+}
+
+?>

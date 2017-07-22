@@ -1,0 +1,144 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Name>newDash</Name>
+    <ProjectGuid>{ec0a8a49-2ff8-400b-b2ef-82bedab9da6f}</ProjectGuid>
+    <RootNamespace>
+    </RootNamespace>
+    <OutputType>Library</OutputType>
+    <ProjectTypeGuids>{A0786B88-2ADB-4C21-ABE8-AA2D79766269}</ProjectTypeGuids>
+    <Runtime>PHP</Runtime>
+    <RuntimeVersion>7.0</RuntimeVersion>
+    <EnvName>PHPDev</EnvName>
+    <PHPDevHostName>192.168.0.66</PHPDevHostName>
+    <PHPDevAutoPort>true</PHPDevAutoPort>
+    <SaveServerSettingsInUserFile>false</SaveServerSettingsInUserFile>
+    <ProjectHome />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <IncludeDebugInformation>true</IncludeDebugInformation>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <IncludeDebugInformation>false</IncludeDebugInformation>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="app\bin\k3Utils.php" />
+    <Compile Include="app\bin\mysql.php" />
+    <Compile Include="app\controllers\Alerts.php" />
+    <Compile Include="app\controllers\Auth.php" />
+    <Compile Include="app\controllers\Controller.php" />
+    <Compile Include="app\controllers\DisVoid.php" />
+    <Compile Include="app\controllers\Labor.php" />
+    <Compile Include="app\controllers\Overview.php" />
+    <Compile Include="app\controllers\Sales.php" />
+    <Compile Include="app\utils\k3utils.php" />
+    <Compile Include="app\controllers\MainController.php" />
+    <Compile Include="app\controllers\UserController.php" />
+    <Compile Include="app\css\dashboard.css" />
+    <Compile Include="app\css\signin.css" />
+    <Compile Include="app\models\Messages.php" />
+    <Compile Include="app\models\User.php" />
+    <Compile Include="app\utils\mysql.php" />
+    <Compile Include="app\utils\PageBuilder.php" />
+    <Compile Include="app\utils\TableBuilder.php" />
+    <Compile Include=".gitignore" />
+    <Compile Include="composer.json" />
+    <Compile Include="config.ini" />
+    <Compile Include="index.php" />
+    <Compile Include="README.md" />
+    <Compile Include="routes.ini" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="app\bin\" />
+    <Folder Include="app\controllers" />
+    <Folder Include="app\css" />
+    <Folder Include="app\js" />
+    <Folder Include="app\models" />
+    <Folder Include="app\images\" />
+    <Folder Include="app\res\" />
+    <Folder Include="app\res\icon\" />
+    <Folder Include="app\res\icon\android\" />
+    <Folder Include="app\res\icon\ios\" />
+    <Folder Include="app\res\icon\windows\" />
+    <Folder Include="app\res\icon\wp8\" />
+    <Folder Include="app\res\screens\" />
+    <Folder Include="app\res\screens\android\" />
+    <Folder Include="app\res\screens\ios\" />
+    <Folder Include="app\res\screens\windows\" />
+    <Folder Include="app\res\screens\wp8\" />
+    <Folder Include="app\utils\" />
+    <Folder Include="app\views" />
+    <Folder Include="app" />
+    <Folder Include="app\views\mobile\" />
+    <Folder Include="tmp\" />
+    <Folder Include="tmp\cache\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="app\config.xml" />
+    <Content Include="app\css\bootstrap-duallistbox.css" />
+    <Content Include="app\css\k3.css" />
+    <Content Include="app\images\rpower.png" />
+    <Content Include="app\js\k3.js" />
+    <Content Include="app\js\k3Validate.js" />
+    <Content Include="app\js\stupidtable.js" />
+    <Content Include="app\res\icon\android\icon-144-xxhdpi.png" />
+    <Content Include="app\res\icon\android\icon-192-xxxhdpi.png" />
+    <Content Include="app\res\icon\android\icon-36-ldpi.png" />
+    <Content Include="app\res\icon\android\icon-48-mdpi.png" />
+    <Content Include="app\res\icon\android\icon-72-hdpi.png" />
+    <Content Include="app\res\icon\android\icon-96-xhdpi.png" />
+    <Content Include="app\res\icon\icon.png" />
+    <Content Include="app\res\icon\ios\icon-120-2x.png" />
+    <Content Include="app\res\icon\ios\icon-120.png" />
+    <Content Include="app\res\icon\ios\icon-2x.png" />
+    <Content Include="app\res\icon\ios\icon-40-2x.png" />
+    <Content Include="app\res\icon\ios\icon-40.png" />
+    <Content Include="app\res\icon\ios\icon-50-2x.png" />
+    <Content Include="app\res\icon\ios\icon-50.png" />
+    <Content Include="app\res\icon\ios\icon-60-2x.png" />
+    <Content Include="app\res\icon\ios\icon-60-3x.png" />
+    <Content Include="app\res\icon\ios\icon-60.png" />
+    <Content Include="app\res\icon\ios\icon-72-2x.png" />
+    <Content Include="app\res\icon\ios\icon-72.png" />
+    <Content Include="app\res\icon\ios\icon-76-2x.png" />
+    <Content Include="app\res\icon\ios\icon-76.png" />
+    <Content Include="app\res\icon\ios\icon-small-2x.png" />
+    <Content Include="app\res\icon\ios\icon-small.png" />
+    <Content Include="app\res\icon\ios\icon.png" />
+    <Content Include="app\res\icon\windows\logo.png" />
+    <Content Include="app\res\icon\windows\smalllogo.png" />
+    <Content Include="app\res\icon\windows\storelogo.png" />
+    <Content Include="app\res\icon\wp8\ApplicationIcon.png" />
+    <Content Include="app\res\icon\wp8\Background.png" />
+    <Content Include="app\res\screens\android\screen-hdpi-portrait.png" />
+    <Content Include="app\res\screens\android\screen-ldpi-portrait.png" />
+    <Content Include="app\res\screens\android\screen-mdpi-portrait.png" />
+    <Content Include="app\res\screens\android\screen-xhdpi-portrait.png" />
+    <Content Include="app\res\screens\ios\screen-ipad-portrait-2x.png" />
+    <Content Include="app\res\screens\ios\screen-ipad-portrait.png" />
+    <Content Include="app\res\screens\ios\screen-iphone-portrait-2x.png" />
+    <Content Include="app\res\screens\ios\screen-iphone-portrait-568h-2x.png" />
+    <Content Include="app\res\screens\ios\screen-iphone-portrait-667h.png" />
+    <Content Include="app\res\screens\ios\screen-iphone-portrait-736h.png" />
+    <Content Include="app\res\screens\ios\screen-iphone-portrait.png" />
+    <Content Include="app\res\screens\windows\splashscreen.png" />
+    <Content Include="app\res\screens\wp8\SplashScreenImage.jpg" />
+    <Content Include="app\views\alerts.html" />
+    <Content Include="app\views\disvoid.html" />
+    <Content Include="app\views\index.html" />
+    <Content Include="app\views\labor.html" />
+    <Content Include="app\views\layout.html" />
+    <Content Include="app\views\mobile\alerts.html" />
+    <Content Include="app\views\mobile\disvoid.html" />
+    <Content Include="app\views\mobile\index.html" />
+    <Content Include="app\views\mobile\labor.html" />
+    <Content Include="app\views\mobile\layout.html" />
+    <Content Include="app\views\mobile\overview.html" />
+    <Content Include="app\views\mobile\sales.html" />
+    <Content Include="app\views\mobile\utils.html" />
+    <Content Include="app\views\overview.html" />
+    <Content Include="app\views\sales.html" />
+    <Content Include="app\views\utils.html" />
+  </ItemGroup>
+</Project>

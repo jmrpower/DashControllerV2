@@ -1,0 +1,43 @@
+<?php
+
+/**
+ *
+ * Top navbar output functions
+ *
+ * @version 1.0
+ * @author Justin
+ */
+class Navigation
+{
+   function topNav()
+   {
+      return "<div class=\"container-fluid\">
+               <nav class=\"navbar navbar-default\">
+                  <div class=\"container-fluid\">
+                     <div class=\"navbar-header\">
+                        <button type=\"button\" class=\"navbar-toggle collapsed pull-left\" data-toggle=\"collapse\" data-target=\"#navbar\" aria-expanded=\"false\" aria-controls=\"navbar\">
+                           <span class=\"sr-only\">Toggle navigation</span>
+                           <span class=\"icon-bar\"></span>
+                           <span class=\"icon-bar\"></span>
+                           <span class=\"icon-bar\"></span>
+                        </button>
+                        <img class=\"pull-right\" src=\"app/images/rpower.png\" alt=\"\" />
+                     </div>
+                     <div id=\"navbar\" class=\"navbar-collapse collapse\">
+                        <ul class=\"nav navbar-nav\">
+                           <li id=\"overviewPage\" class=\"navigation\" data-page=\"overview\"><a href=\"\">Overview</a></li>
+                           <li id=\"salesPage\" class=\"navigation\" data-page=\"sales\"><a href=\"\">Sales</a></li>
+                           <li id=\"disvoidPage\" class=\"navigation\" data-page=\"disvoid\"><a href=\"\">Discounts/Voids</a></li>
+                           <li id=\"laborPage\" class=\"navigation\" data-page=\"labor\"><a href=\"\">Labor</a></li>
+                           <li id=\"alertPage\" class=\"navigation\" data-page=\"alerts\"><a href=\"\">Email Alerts</a></li>
+                           <li id=\"utilsPage\" class=\"navigation\" data-page=\"utils\"><a href=\"\">Utils</a></li>
+                           <li id=\"orderPage\" class=\"navigation\" data-page=\"order\"><a href=\"\">Order Supplies</a></li>
+                           <li class=\"navigation\" data-page=\"settings\"><a href=\"/destroySession\">Logout</a></li>
+                        </ul>
+                        <ul class=\"nav navbar-nav navbar-right\"></ul>
+                     </div>
+                  </div>
+               </nav>
+            </div>";
+   }
+}
